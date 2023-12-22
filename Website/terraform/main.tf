@@ -1,19 +1,16 @@
 terraform {
-    cloud {
+  cloud {
     organization = "mateoliverkovacs"
-
     workspaces {
-      name = "Playground"
-        }
+        name = "Playground"
     }
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.16"
+       version = "= 3.74.2"
     }
   }
-
-  required_version = ">= 1.2.0"
 }
 
 provider "aws" {
