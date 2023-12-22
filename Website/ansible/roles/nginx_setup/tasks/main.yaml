@@ -1,0 +1,28 @@
+- name : Clean nginx config
+  shell: echo "" > /etc/nginx/nginx.conf
+  become: true
+
+- name: Creates directory
+  file:
+    path: "{{ item }}"
+    stage: directory
+    mode: '0777'
+  with_items: "{{ cert_path }}"
+  become: true
+
+- name: Generate Let's encrypt ssl
+  shell: "~/.local/bin/certbot certonly --dns-route53 -d {{ webhost }} --config-dir {{ cert_path[0] }} --work-dir {{ cert_path[1] }} --logs-dir {{ cert_path[2] }} --email {{ cert_email }} --agree-tos --noninteractive"
+
+- name: Modify the Let's encrypt directory permission
+  shell: chmod -R 755 `dirname {{ cert_path[0] }}`
+  become: true
+
+- name: Set up the nginx conf
+  ansible.bultin.blockinfile:
+    path: /etc/nginx/nginx.conf
+    marker: "#ANSIBLE MANAGED BLOCK"
+    block: |
+      user www-data;
+      worker_processes auto;
+
+  become: true

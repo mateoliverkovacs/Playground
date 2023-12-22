@@ -1,0 +1,8 @@
+# Nginx
+webhost: "{{ inventory_hostname }}"
+cert_path:
+  - /etc/letsencrypt/certs/config
+  - /etc/letsencrypt/certs/work
+  - /etc/letsencrypt/certs/log
+
+cert_email: "mateoliverkovacs@gmail.com"
