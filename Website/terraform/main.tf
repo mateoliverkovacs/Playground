@@ -1,4 +1,11 @@
 terraform {
+    cloud {
+    organization = "mateoliverkovacs"
+
+    workspaces {
+      name = "Playground"
+        }
+    }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -10,15 +17,23 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "mateoliver.kovacs"
+  region  = "eu-north-1"
 }
 
-resource "aws_instance" "nginx_server" {
-  ami           = "ami-04e914639d0cca79a"
-  instance_type = "t2.micro"
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+
+  name = "single-instance"
+
+  instance_type          = "t3.micro"
+  ami                    = "ami-0014ce3e52359afbd"
+  key_name               = "user1"
+  monitoring             = true
+  vpc_security_group_ids = ["sg-0a8aec295d2868a18"]
+  subnet_id              = "subnet-0d59db081719c9210"
 
   tags = {
-    Name = "mateoliverkovacs_nginx_website"
+    Terraform   = "true"
+    Environment = "dev"
   }
 }
