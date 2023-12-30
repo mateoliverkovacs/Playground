@@ -62,7 +62,7 @@ module "ec2_instance" {
   ami                    = "ami-03643cf1426c9b40b"
   key_name               = "ubuntu"
   monitoring             = true
-  vpc_security_group_ids = aws_security_group.mateoliverkovacs_SG
+  vpc_security_group_ids = [aws_security_group.mateoliverkovacs_SG.id]
   subnet_id              = "subnet-0d59db081719c9210"
 
   tags = {
