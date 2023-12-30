@@ -44,11 +44,12 @@ resource "aws_security_group" "mateoliverkovacs_SG" {
 }
 
 # ---------------------------DEFAULT SUBNET USAGE---------------------------
-resource "aws_default_subnet" "default_az1" {
-  availability_zone = "us-west-2a"
+resource "aws_subnet" "main" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = "Default subnet for us-west-2a"
+    Name = "Main"
   }
 }
 
@@ -63,7 +64,7 @@ module "ec2_instance" {
   key_name               = "ubuntu"
   monitoring             = true
   vpc_security_group_ids = [aws_security_group.mateoliverkovacs_SG.id]
-  subnet_id              = "subnet-0d59db081719c9210"
+  subnet_id              = [aws_subnet.main.id]
 
   tags = {
     Terraform   = "true"
